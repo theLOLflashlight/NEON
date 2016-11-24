@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Eaz-8T-egF">
+                                <rect key="frame" x="0.0" y="237" width="600" height="363"/>
+                                <items>
+                                    <barButtonItem title="Select Photo" id="2dj-42-SQk">
+                                        <connections>
+                                            <action selector="showImagePicker:" destination="BYZ-38-t0r" id="3pk-aK-RNb"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="0.0" y="504" width="400" height="44"/>
+                                </variation>
+                            </toolbar>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Cloud" translatesAutoresizingMaskIntoConstraints="NO" id="Mna-y5-FrM">
+                                <rect key="frame" x="150" y="20" width="300" height="197"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.82972171532846717" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="centerX" secondItem="Mna-y5-FrM" secondAttribute="centerX" id="Q4X-zw-hjo"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="Eaz-8T-egF" secondAttribute="bottom" id="SjK-aq-jdq"/>
+                            <constraint firstItem="Eaz-8T-egF" firstAttribute="top" secondItem="Mna-y5-FrM" secondAttribute="bottom" constant="20" id="c44-XJ-kqp"/>
+                            <constraint firstAttribute="trailing" secondItem="Eaz-8T-egF" secondAttribute="trailing" id="ddp-hS-Cty"/>
+                            <constraint firstItem="Mna-y5-FrM" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="oBQ-d9-vCs"/>
+                            <constraint firstItem="Eaz-8T-egF" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ubT-sZ-9ho"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="Mna-y5-FrM" id="5WN-XP-F12"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="138" y="182"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Cloud" width="300" height="197"/>
+    </resources>
+</document>
