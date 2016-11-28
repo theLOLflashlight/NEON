@@ -14,6 +14,8 @@
 		0214A5CD1A0C79D000CC9681 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0214A5CC1A0C79D000CC9681 /* Images.xcassets */; };
 		0214A5D01A0C79D000CC9681 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0214A5CE1A0C79D000CC9681 /* LaunchScreen.xib */; };
 		0214A5DC1A0C79D000CC9681 /* SomeNEONTestsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0214A5DB1A0C79D000CC9681 /* SomeNEONTestsTests.m */; };
+		59580F1B1DEBACAE00B65E8E /* HelloGLKitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59580F1A1DEBACAE00B65E8E /* HelloGLKitViewController.m */; };
+		59580F1D1DEBACDC00B65E8E /* tile_floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 59580F1C1DEBACDC00B65E8E /* tile_floor.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,9 @@
 		0214A5D51A0C79D000CC9681 /* SomeNEONTestsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SomeNEONTestsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0214A5DA1A0C79D000CC9681 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0214A5DB1A0C79D000CC9681 /* SomeNEONTestsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SomeNEONTestsTests.m; sourceTree = "<group>"; };
+		59580F191DEBACAE00B65E8E /* HelloGLKitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloGLKitViewController.h; sourceTree = "<group>"; };
+		59580F1A1DEBACAE00B65E8E /* HelloGLKitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelloGLKitViewController.m; sourceTree = "<group>"; };
+		59580F1C1DEBACDC00B65E8E /* tile_floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tile_floor.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +86,9 @@
 		0214A5BE1A0C79D000CC9681 /* SomeNEONTests */ = {
 			isa = PBXGroup;
 			children = (
+				59580F1C1DEBACDC00B65E8E /* tile_floor.png */,
+				59580F191DEBACAE00B65E8E /* HelloGLKitViewController.h */,
+				59580F1A1DEBACAE00B65E8E /* HelloGLKitViewController.m */,
 				0214A5C31A0C79D000CC9681 /* AppDelegate.h */,
 				0214A5C41A0C79D000CC9681 /* AppDelegate.m */,
 				0214A5C61A0C79D000CC9681 /* ViewController.h */,
@@ -168,7 +176,7 @@
 				TargetAttributes = {
 					0214A5BB1A0C79D000CC9681 = {
 						CreatedOnToolsVersion = 6.1;
-						DevelopmentTeam = QBSFJ43NUJ;
+						DevelopmentTeam = F9Z6G53829;
 					};
 					0214A5D41A0C79D000CC9681 = {
 						CreatedOnToolsVersion = 6.1;
@@ -200,6 +208,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				59580F1D1DEBACDC00B65E8E /* tile_floor.png in Resources */,
 				0214A5CB1A0C79D000CC9681 /* Main.storyboard in Resources */,
 				0214A5D01A0C79D000CC9681 /* LaunchScreen.xib in Resources */,
 				0214A5CD1A0C79D000CC9681 /* Images.xcassets in Resources */,
@@ -223,6 +232,7 @@
 				0214A5C81A0C79D000CC9681 /* ViewController.mm in Sources */,
 				0214A5C51A0C79D000CC9681 /* AppDelegate.m in Sources */,
 				0214A5C21A0C79D000CC9681 /* main.m in Sources */,
+				59580F1B1DEBACAE00B65E8E /* HelloGLKitViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,12 +356,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = QBSFJ43NUJ;
 				INFOPLIST_FILE = SomeNEONTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ca.btechgames2016.AndrewNEON;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.btechgames2016.SomeNEONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -360,12 +373,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = QBSFJ43NUJ;
 				INFOPLIST_FILE = SomeNEONTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = ca.btechgames2016.AndrewNEON;
+				PRODUCT_BUNDLE_IDENTIFIER = ca.btechgames2016.SomeNEONTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
