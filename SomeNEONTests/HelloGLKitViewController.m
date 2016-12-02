@@ -8,6 +8,7 @@
 
 #import "HelloGLKitViewController.h"
 #import <OpenGLES/ES2/glext.h>
+#import "arm_neon.h"
 
 typedef struct {
     float Position[3];
@@ -87,6 +88,11 @@ const GLubyte Indices[] = {
     float _slerpMax;
     GLKQuaternion _slerpStart;
     GLKQuaternion _slerpEnd;
+    
+    NSTimeInterval runTime;
+    NSTimeInterval ASMRunTime;
+    IBOutlet UIButton *TestButton;
+    bool isRotating;
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
@@ -103,6 +109,9 @@ const GLubyte Indices[] = {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        runTime = 0;
+        ASMRunTime = 0;
+        isRotating = false;
     }
     return self;
 }
@@ -176,6 +185,8 @@ const GLubyte Indices[] = {
     UITapGestureRecognizer * dtRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
     dtRec.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:dtRec];
+    
+    _rotation = 0;
 }
 
 - (void)tearDownGL {
@@ -237,47 +248,80 @@ const GLubyte Indices[] = {
     glDrawElements(GL_TRIANGLES, sizeof(Indices)/sizeof(Indices[0]), GL_UNSIGNED_BYTE, 0);
     
 }
+- (IBAction)wasPressed:(id)sender {
+    isRotating = true;
+}
 
 #pragma mark - GLKViewControllerDelegate
 
 - (void)update {
-    if (_increasing) {
-        _curRed += 1.0 * self.timeSinceLastUpdate;
-    } else {
-        _curRed -= 1.0 * self.timeSinceLastUpdate;
-    }
-    if (_curRed >= 1.0) {
-        _curRed = 1.0;
-        _increasing = NO;
-    }
-    if (_curRed <= 0.0) {
-        _curRed = 0.0;
-        _increasing = YES;
-    }
     
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 4.0f, 10.0f);    
     self.effect.transform.projectionMatrix = projectionMatrix;
     
-    if (_slerping) {
-        
-        _slerpCur += self.timeSinceLastUpdate;
-        float slerpAmt = _slerpCur / _slerpMax;
-        if (slerpAmt > 1.0) {
-            slerpAmt = 1.0;
-            _slerping = NO;
-        }
-        
-        _quat = GLKQuaternionSlerp(_slerpStart, _slerpEnd, slerpAmt);
+    if (isRotating) {
+        _rotation += 0.1;
     }
     
-    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -6.0f);   
-    //modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, _rotMatrix);
-    GLKMatrix4 rotation = GLKMatrix4MakeWithQuaternion(_quat);
+    if(_rotation > 50)
+    {
+        if(isRotating){
+            NSLog(@"Normal Run Time: %f ms\n", runTime*-1000);
+            NSLog(@"ASM Run Time: %f ms\n", ASMRunTime*-1000);
+        }
+        
+        
+        isRotating = false;
+        
+    }
+    
+    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -6.0f);
+    GLKMatrix4 rotation = GLKMatrix4MakeRotation(_rotation, 1, 1, 1);
+    
+    NSDate* start = [NSDate date];
     modelViewMatrix = GLKMatrix4Multiply(modelViewMatrix, rotation);
+    runTime += [start timeIntervalSinceNow];
     
-    self.effect.transform.modelviewMatrix = modelViewMatrix;
+    start = [NSDate date];
+    GLKMatrix4 modelViewMatrixASM = Matrix4MultiplyASM(modelViewMatrix, rotation);
+    ASMRunTime += [start timeIntervalSinceNow];
     
+    self.effect.transform.modelviewMatrix = modelViewMatrixASM;
+    
+}
+
+GLKMatrix4 Matrix4MultiplyASM(GLKMatrix4 modelViewMatrix, GLKMatrix4 rotation)
+{
+    GLKMatrix4 result;
+#ifndef __LP64__
+    __asm__ volatile("vld1.32       {d16-d19}, [%1]!      \n"
+                     "vld1.32       {d20-d23}, [%1]!      \n"
+                     "vld1.32       {d0-d3}, [%2]!        \n"
+                     "vld1.32       {d4-d7}, [%2]!        \n"
+                     "vmul.f32      q12, q8, d0[0]      \n"
+                     "vmul.f32      q13, q8, d2[0]      \n"
+                     "vmul.f32      q14, q8, d4[0]      \n"
+                     "vmul.f32      q15, q8, d6[0]      \n"
+                     "vmla.f32     q12, q9, d0[1]      \n"
+                     "vmla.f32     q13, q9, d2[1]      \n"
+                     "vmla.f32     q14, q9, d4[1]      \n"
+                     "vmla.f32     q15, q9, d6[1]      \n"
+                     "vmla.f32     q12, q10, d1[0]     \n"
+                     "vmla.f32     q13, q10, d3[0]     \n"
+                     "vmla.f32     q14, q10, d5[0]     \n"
+                     "vmla.f32     q15, q10, d7[0]     \n"
+                     "vmla.f32     q12, q11, d1[1]     \n"
+                     "vmla.f32     q13, q11, d3[1]     \n"
+                     "vmla.f32     q14, q11, d5[1]     \n"
+                     "vmla.f32     q15, q11, d7[1]     \n"
+                     "vst1.32       {d24-d27}, [%0]!      \n"
+                     "vst1.32       {d28-d31}, [%0]!      \n"
+                     :
+                     : "r"(&result), "r"(&modelViewMatrix), "r"(&rotation)
+                     );
+#endif
+                     return result;
 }
 
 - (GLKVector3) projectOntoSurface:(GLKVector3) touchPoint

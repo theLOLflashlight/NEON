@@ -72,13 +72,31 @@
                     <glkView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" id="3PG-Jp-bvL">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LMU-16-q78">
+                                <rect key="frame" x="40" y="536" width="30" height="30"/>
+                                <state key="normal" title="Test"/>
+                                <connections>
+                                    <action selector="wasPressed:" destination="ahw-Ir-ljZ" eventType="touchUpInside" id="MH7-OR-OA6"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <gestureRecognizers/>
                         <connections>
                             <outlet property="delegate" destination="ahw-Ir-ljZ" id="5D1-Xp-byB"/>
+                            <outletCollection property="gestureRecognizers" destination="cub-p3-5lm" appends="YES" id="5dm-Av-a3B"/>
                         </connections>
                     </glkView>
+                    <connections>
+                        <outlet property="TestButton" destination="LMU-16-q78" id="9OX-Lj-RHm"/>
+                    </connections>
                 </glkViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QNu-EX-18I" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="cub-p3-5lm">
+                    <connections>
+                        <segue destination="1Nq-Mv-5Kr" kind="show" id="HsQ-RV-fZj"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1004" y="396"/>
         </scene>
@@ -126,4 +144,7 @@
     <resources>
         <image name="Cloud" width="300" height="197"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="xaz-1g-Wpr"/>
+    </inferredMetricsTieBreakers>
 </document>
