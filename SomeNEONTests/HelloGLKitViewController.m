@@ -294,29 +294,35 @@ const GLubyte Indices[] = {
 GLKMatrix4 Matrix4MultiplyASM(GLKMatrix4 modelViewMatrix, GLKMatrix4 rotation)
 {
     GLKMatrix4 result;
+    
+    /*
+     * Matrix multiplication assembly code adopted from: 
+     * https://community.arm.com/groups/processors/blog/2010/06/28/coding-for-neon--part-3-matrix-multiplication
+     */
+    
 #ifndef __LP64__
-    __asm__ volatile("vld1.32       {d16-d19}, [%1]!      \n"
-                     "vld1.32       {d20-d23}, [%1]!      \n"
-                     "vld1.32       {d0-d3}, [%2]!        \n"
-                     "vld1.32       {d4-d7}, [%2]!        \n"
+    __asm__ volatile("vld1.32       {d16-d19}, [%1]!    \n"
+                     "vld1.32       {d20-d23}, [%1]!    \n" // Load the first matrix
+                     "vld1.32       {d0-d3}, [%2]!      \n"
+                     "vld1.32       {d4-d7}, [%2]!      \n" // Load the second matrix
                      "vmul.f32      q12, q8, d0[0]      \n"
                      "vmul.f32      q13, q8, d2[0]      \n"
                      "vmul.f32      q14, q8, d4[0]      \n"
-                     "vmul.f32      q15, q8, d6[0]      \n"
-                     "vmla.f32     q12, q9, d0[1]      \n"
-                     "vmla.f32     q13, q9, d2[1]      \n"
-                     "vmla.f32     q14, q9, d4[1]      \n"
-                     "vmla.f32     q15, q9, d6[1]      \n"
-                     "vmla.f32     q12, q10, d1[0]     \n"
-                     "vmla.f32     q13, q10, d3[0]     \n"
-                     "vmla.f32     q14, q10, d5[0]     \n"
-                     "vmla.f32     q15, q10, d7[0]     \n"
-                     "vmla.f32     q12, q11, d1[1]     \n"
-                     "vmla.f32     q13, q11, d3[1]     \n"
-                     "vmla.f32     q14, q11, d5[1]     \n"
-                     "vmla.f32     q15, q11, d7[1]     \n"
-                     "vst1.32       {d24-d27}, [%0]!      \n"
-                     "vst1.32       {d28-d31}, [%0]!      \n"
+                     "vmul.f32      q15, q8, d6[0]      \n" // Calculate initial lane values by multiplying
+                     "vmla.f32      q12, q9, d0[1]      \n" // Multiply and add into each lane accordingly
+                     "vmla.f32      q13, q9, d2[1]      \n"
+                     "vmla.f32      q14, q9, d4[1]      \n"
+                     "vmla.f32      q15, q9, d6[1]      \n"
+                     "vmla.f32      q12, q10, d1[0]     \n"
+                     "vmla.f32      q13, q10, d3[0]     \n"
+                     "vmla.f32      q14, q10, d5[0]     \n"
+                     "vmla.f32      q15, q10, d7[0]     \n"
+                     "vmla.f32      q12, q11, d1[1]     \n"
+                     "vmla.f32      q13, q11, d3[1]     \n"
+                     "vmla.f32      q14, q11, d5[1]     \n"
+                     "vmla.f32      q15, q11, d7[1]     \n"
+                     "vst1.32       {d24-d27}, [%0]!    \n" // Store values into the result matrix
+                     "vst1.32       {d28-d31}, [%0]!    \n"
                      :
                      : "r"(&result), "r"(&modelViewMatrix), "r"(&rotation)
                      );
